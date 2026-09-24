@@ -19,7 +19,11 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { Product, ProductService } from '@/app/pages/service/product.service';
+
+import {
+    Product,
+    ProductService
+} from '@/app/pages/service/product.service';
 
 interface Column {
     field: string;
@@ -35,6 +39,7 @@ interface ExportColumn {
 @Component({
     selector: 'app-crud',
     standalone: true,
+
     imports: [
         CommonModule,
         TableModule,
@@ -56,11 +61,13 @@ interface ExportColumn {
         ConfirmDialogModule,
         TooltipModule
     ],
+
     template: `
         <div class="crud-page">
 
             <p-toolbar styleClass="crud-toolbar">
                 <ng-template #start>
+
                     <div class="toolbar-actions">
                         <p-button
                             label="New Product"
@@ -78,17 +85,21 @@ interface ExportColumn {
                             (onClick)="deleteSelectedProducts()"
                         />
                     </div>
+
                 </ng-template>
 
                 <ng-template #end>
+
                     <p-button
                         label="Export"
                         icon="pi pi-upload"
                         severity="secondary"
                         (onClick)="exportCSV()"
                     />
+
                 </ng-template>
             </p-toolbar>
+
 
             <p-table
                 #dt
@@ -112,16 +123,24 @@ interface ExportColumn {
             >
 
                 <ng-template #caption>
+
                     <div class="table-heading">
 
                         <div class="table-title">
                             <h2>Manage Products</h2>
-                            <span>View and manage your product inventory</span>
+
+                            <span>
+                                View and manage your product inventory
+                            </span>
                         </div>
 
                         <div class="table-search">
+
                             <p-iconfield>
-                                <p-inputicon styleClass="pi pi-search" />
+
+                                <p-inputicon
+                                    styleClass="pi pi-search"
+                                />
 
                                 <input
                                     pInputText
@@ -131,14 +150,20 @@ interface ExportColumn {
                                     (input)="onGlobalFilter(dt, $event)"
                                     placeholder="Search products..."
                                 />
+
                             </p-iconfield>
+
                         </div>
 
                     </div>
+
                 </ng-template>
 
+
                 <ng-template #header>
+
                     <tr>
+
                         <th class="selection-column">
                             <p-tableHeaderCheckbox />
                         </th>
@@ -151,8 +176,10 @@ interface ExportColumn {
                             pSortableColumn="name"
                             class="name-column"
                         >
-                            Name
-                            <p-sortIcon field="name" />
+                            <div class="header-content">
+                                <span>Name</span>
+                                <p-sortIcon field="name" />
+                            </div>
                         </th>
 
                         <th class="image-column">
@@ -163,83 +190,110 @@ interface ExportColumn {
                             pSortableColumn="price"
                             class="price-column"
                         >
-                            Price
-                            <p-sortIcon field="price" />
+                            <div class="header-content">
+                                <span>Price</span>
+                                <p-sortIcon field="price" />
+                            </div>
                         </th>
 
                         <th
                             pSortableColumn="category"
                             class="category-column"
                         >
-                            Category
-                            <p-sortIcon field="category" />
+                            <div class="header-content">
+                                <span>Category</span>
+                                <p-sortIcon field="category" />
+                            </div>
                         </th>
 
                         <th
                             pSortableColumn="rating"
                             class="rating-column"
                         >
-                            Reviews
-                            <p-sortIcon field="rating" />
+                            <div class="header-content">
+                                <span>Reviews</span>
+                                <p-sortIcon field="rating" />
+                            </div>
                         </th>
 
                         <th
                             pSortableColumn="inventoryStatus"
                             class="status-column"
                         >
-                            Status
-                            <p-sortIcon field="inventoryStatus" />
+                            <div class="header-content">
+                                <span>Status</span>
+                                <p-sortIcon field="inventoryStatus" />
+                            </div>
                         </th>
 
                         <th class="actions-header">
                             Actions
                         </th>
+
                     </tr>
+
                 </ng-template>
 
+
                 <ng-template #body let-product>
+
                     <tr>
 
                         <td class="selection-column">
                             <p-tableCheckbox [value]="product" />
                         </td>
 
+
                         <td class="code-column">
+
                             <span class="product-code">
                                 {{ product.code || '—' }}
                             </span>
+
                         </td>
 
+
                         <td class="name-column">
+
                             <div class="product-name">
                                 {{ product.name || 'Unnamed Product' }}
                             </div>
+
                         </td>
+
 
                         <td class="image-column">
 
                             <div class="product-image-wrapper">
+
                                 <img
                                     [src]="getProductImage(product)"
                                     [alt]="product.name || 'Product image'"
                                     class="product-image"
                                     (error)="onImageError($event)"
                                 />
+
                             </div>
 
                         </td>
 
+
                         <td class="price-column">
 
                             <span class="product-price">
-                                {{ product.price || 0 | currency:'EUR':'symbol':'1.0-0' }}
+                                {{
+                                    product.price || 0
+                                        | currency:'EUR':'symbol':'1.0-0'
+                                }}
                             </span>
 
                         </td>
 
+
                         <td class="category-column">
                             {{ product.category || '—' }}
                         </td>
+
 
                         <td class="rating-column">
 
@@ -250,16 +304,26 @@ interface ExportColumn {
 
                         </td>
 
+
                         <td class="status-column">
 
                             <div class="status-wrapper">
+
                                 <p-tag
-                                    [value]="product.inventoryStatus || 'UNKNOWN'"
-                                    [severity]="getSeverity(product.inventoryStatus)"
+                                    [value]="
+                                        product.inventoryStatus || 'UNKNOWN'
+                                    "
+                                    [severity]="
+                                        getSeverity(
+                                            product.inventoryStatus
+                                        )
+                                    "
                                 />
+
                             </div>
 
                         </td>
+
 
                         <td class="actions-column">
 
@@ -273,6 +337,7 @@ interface ExportColumn {
                                     size="small"
                                     (onClick)="editProduct(product)"
                                     pTooltip="Edit product"
+                                    aria-label="Edit product"
                                 />
 
                                 <p-button
@@ -280,8 +345,10 @@ interface ExportColumn {
                                     severity="danger"
                                     [rounded]="true"
                                     [outlined]="true"
+                                    size="small"
                                     (onClick)="deleteProduct(product)"
                                     pTooltip="Delete product"
+                                    aria-label="Delete product"
                                 />
 
                             </div>
@@ -289,27 +356,41 @@ interface ExportColumn {
                         </td>
 
                     </tr>
+
                 </ng-template>
 
+
                 <ng-template #emptymessage>
+
                     <tr>
+
                         <td colspan="9">
 
                             <div class="empty-state">
+
                                 <i class="pi pi-inbox"></i>
-                                <strong>No products found</strong>
+
+                                <strong>
+                                    No products found
+                                </strong>
+
                                 <span>
-                                    Try changing your search or add a new product.
+                                    Try changing your search or add a new
+                                    product.
                                 </span>
+
                             </div>
 
                         </td>
+
                     </tr>
+
                 </ng-template>
 
             </p-table>
 
         </div>
+
 
         <p-dialog
             [(visible)]="productDialog"
@@ -324,17 +405,23 @@ interface ExportColumn {
 
                 <div class="dialog-content">
 
+
                     <div
                         class="dialog-image-wrapper"
                         *ngIf="product.image"
                     >
+
                         <img
                             [src]="getProductImage(product)"
-                            [alt]="product.name || 'Product image'"
+                            [alt]="
+                                product.name || 'Product image'
+                            "
                             class="dialog-product-image"
                             (error)="onImageError($event)"
                         />
+
                     </div>
+
 
                     <div class="form-field">
 
@@ -350,18 +437,25 @@ interface ExportColumn {
                             required
                             autofocus
                             fluid
+                            aria-label="Product name"
                         />
 
                         <small
                             class="field-error"
-                            *ngIf="submitted && !product.name?.trim()"
+                            *ngIf="
+                                submitted &&
+                                !product.name?.trim()
+                            "
                         >
                             Name is required.
                         </small>
 
                     </div>
 
-                    <div class="form-field description-field">
+
+                    <div
+                        class="form-field description-field"
+                    >
 
                         <label for="description">
                             Description
@@ -373,9 +467,11 @@ interface ExportColumn {
                             [(ngModel)]="product.description"
                             rows="5"
                             fluid
+                            aria-label="Product description"
                         ></textarea>
 
                     </div>
+
 
                     <div class="form-field">
 
@@ -395,6 +491,7 @@ interface ExportColumn {
 
                     </div>
 
+
                     <div class="form-field">
 
                         <label>
@@ -404,60 +501,77 @@ interface ExportColumn {
                         <div class="category-grid">
 
                             <div class="category-option">
+
                                 <p-radiobutton
                                     id="category1"
                                     name="category"
                                     value="Accessories"
                                     [(ngModel)]="product.category"
                                 />
+
                                 <label for="category1">
                                     Accessories
                                 </label>
+
                             </div>
 
+
                             <div class="category-option">
+
                                 <p-radiobutton
                                     id="category2"
                                     name="category"
                                     value="Clothing"
                                     [(ngModel)]="product.category"
                                 />
+
                                 <label for="category2">
                                     Clothing
                                 </label>
+
                             </div>
 
+
                             <div class="category-option">
+
                                 <p-radiobutton
                                     id="category3"
                                     name="category"
                                     value="Electronics"
                                     [(ngModel)]="product.category"
                                 />
+
                                 <label for="category3">
                                     Electronics
                                 </label>
+
                             </div>
 
+
                             <div class="category-option">
+
                                 <p-radiobutton
                                     id="category4"
                                     name="category"
                                     value="Fitness"
                                     [(ngModel)]="product.category"
                                 />
+
                                 <label for="category4">
                                     Fitness
                                 </label>
+
                             </div>
 
                         </div>
 
                     </div>
 
+
                     <div class="form-grid">
 
                         <div class="form-field">
+
                             <label for="price">
                                 Price
                             </label>
@@ -472,9 +586,14 @@ interface ExportColumn {
                                 [maxFractionDigits]="0"
                                 fluid
                             />
+
                         </div>
 
-                        <div class="form-field quantity-field">
+
+                        <div
+                            class="form-field quantity-field"
+                        >
+
                             <label for="quantity">
                                 Quantity
                             </label>
@@ -484,6 +603,7 @@ interface ExportColumn {
                                 [(ngModel)]="product.quantity"
                                 fluid
                             />
+
                         </div>
 
                     </div>
@@ -491,6 +611,7 @@ interface ExportColumn {
                 </div>
 
             </ng-template>
+
 
             <ng-template #footer>
 
@@ -516,6 +637,7 @@ interface ExportColumn {
 
         </p-dialog>
 
+
         <p-confirmdialog
             [style]="{ width: '720px' }"
         />
@@ -532,22 +654,32 @@ interface ExportColumn {
             font-size: 15px;
         }
 
+
         .crud-page {
             width: 100%;
             padding: 2rem;
             overflow-x: auto;
         }
 
+
         .crud-toolbar {
             margin-bottom: 2.5rem;
             min-height: 82px;
         }
+
 
         .toolbar-actions {
             display: flex;
             align-items: flex-start;
             gap: 1.5rem;
         }
+
+
+        /*
+         * Intentional visual defect:
+         * Excessive spacing makes the table heading detached
+         * from the table and pushes the search control away.
+         */
 
         .table-heading {
             display: flex;
@@ -559,6 +691,7 @@ interface ExportColumn {
             padding: 1.5rem 2rem 2.5rem;
         }
 
+
         .table-title {
             display: flex;
             flex-direction: column;
@@ -567,6 +700,12 @@ interface ExportColumn {
             margin-right: auto;
             min-width: 300px;
         }
+
+
+        /*
+         * Intentional typography defect:
+         * Heading is disproportionately small and overly spaced.
+         */
 
         .table-title h2 {
             margin: 0;
@@ -577,11 +716,17 @@ interface ExportColumn {
             text-transform: uppercase;
         }
 
+
         .table-title span {
             font-size: 0.7rem;
             line-height: 2;
             color: var(--p-text-muted-color);
         }
+
+
+        /*
+         * Intentional alignment defect.
+         */
 
         .table-search {
             width: 240px;
@@ -589,15 +734,22 @@ interface ExportColumn {
             transform: translateY(18px);
         }
 
+
         .search-input {
             width: 100%;
             height: 42px;
         }
 
+
+        /*
+         * Intentional table alignment defect.
+         */
+
         .product-table :is(td, th) {
             vertical-align: top;
             padding: 1.35rem 0.8rem;
         }
+
 
         .product-table th {
             font-size: 0.72rem;
@@ -606,43 +758,53 @@ interface ExportColumn {
             text-transform: uppercase;
         }
 
+
         .selection-column {
             width: 4rem;
         }
 
+
         .code-column {
             min-width: 9rem;
         }
+
 
         .name-column {
             min-width: 16rem;
             max-width: 22rem;
         }
 
+
         .image-column {
             width: 115px;
         }
+
 
         .price-column {
             min-width: 9rem;
         }
 
+
         .category-column {
             min-width: 12rem;
         }
+
 
         .rating-column {
             min-width: 12rem;
         }
 
+
         .status-column {
             min-width: 12rem;
         }
+
 
         .actions-header {
             width: 145px;
             text-align: left;
         }
+
 
         .product-code {
             font-family: monospace;
@@ -650,6 +812,7 @@ interface ExportColumn {
             color: #a1a1aa;
             white-space: nowrap;
         }
+
 
         .product-name {
             font-size: 1rem;
@@ -659,11 +822,18 @@ interface ExportColumn {
             overflow-wrap: anywhere;
         }
 
+
         .product-price {
             font-size: 0.85rem;
             font-weight: 400;
             white-space: nowrap;
         }
+
+
+        /*
+         * Intentional image defect:
+         * The container is unusually wide and short.
+         */
 
         .product-image-wrapper {
             width: 90px;
@@ -677,6 +847,11 @@ interface ExportColumn {
             border: 3px solid #e4e4e7;
         }
 
+
+        /*
+         * Intentional image distortion.
+         */
+
         .product-image {
             width: 100%;
             height: 100%;
@@ -684,9 +859,15 @@ interface ExportColumn {
             object-fit: fill;
         }
 
+
         .status-wrapper {
             padding-top: 8px;
         }
+
+
+        /*
+         * Intentional action alignment inconsistency.
+         */
 
         .row-actions {
             display: flex;
@@ -696,9 +877,16 @@ interface ExportColumn {
             min-width: 150px;
         }
 
+
+        /*
+         * Intentional visual inconsistency:
+         * Delete button is noticeably larger than edit.
+         */
+
         .row-actions p-button:last-child {
             transform: scale(1.2);
         }
+
 
         .empty-state {
             min-height: 280px;
@@ -711,19 +899,27 @@ interface ExportColumn {
             color: var(--p-text-muted-color);
         }
 
+
         .empty-state i {
             font-size: 3rem;
         }
+
 
         .empty-state strong {
             font-size: 0.9rem;
             font-weight: 800;
         }
 
+
         .empty-state span {
             font-size: 0.7rem;
             max-width: 280px;
         }
+
+
+        /*
+         * Dialog is intentionally oversized.
+         */
 
         .dialog-content {
             display: flex;
@@ -731,6 +927,11 @@ interface ExportColumn {
             gap: 2rem;
             padding: 2rem 1.5rem;
         }
+
+
+        /*
+         * Intentional image proportion defect in dialog.
+         */
 
         .dialog-image-wrapper {
             width: 100%;
@@ -744,11 +945,13 @@ interface ExportColumn {
             border: 2px solid #d4d4d8;
         }
 
+
         .dialog-product-image {
             width: 100%;
             height: 100%;
             object-fit: fill;
         }
+
 
         .form-field {
             display: flex;
@@ -756,6 +959,7 @@ interface ExportColumn {
             gap: 1rem;
             min-width: 0;
         }
+
 
         .form-field > label {
             font-size: 0.7rem;
@@ -765,15 +969,22 @@ interface ExportColumn {
             text-transform: uppercase;
         }
 
+
         .description-field {
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
 
+
         .field-error {
             color: var(--p-red-500);
             font-size: 0.7rem;
         }
+
+
+        /*
+         * Intentional category spacing issue.
+         */
 
         .category-grid {
             display: grid;
@@ -782,6 +993,7 @@ interface ExportColumn {
             padding: 1rem 0;
         }
 
+
         .category-option {
             display: flex;
             align-items: flex-start;
@@ -789,10 +1001,12 @@ interface ExportColumn {
             white-space: nowrap;
         }
 
+
         .category-option label {
             font-size: 0.75rem;
             line-height: 1.8;
         }
+
 
         .form-grid {
             display: grid;
@@ -800,9 +1014,15 @@ interface ExportColumn {
             gap: 0.4rem;
         }
 
+
+        /*
+         * Intentional field misalignment.
+         */
+
         .quantity-field {
             transform: translateX(20px);
         }
+
 
         .dialog-footer {
             display: flex;
@@ -810,6 +1030,11 @@ interface ExportColumn {
             justify-content: space-between;
             padding: 0.5rem 1.5rem 1rem;
         }
+
+
+        /*
+         * Intentional responsive defect.
+         */
 
         @media (max-width: 900px) {
 
@@ -832,6 +1057,11 @@ interface ExportColumn {
 
         }
 
+
+        /*
+         * Intentional mobile overflow defect.
+         */
+
         @media (max-width: 600px) {
 
             .crud-page {
@@ -840,9 +1070,16 @@ interface ExportColumn {
                 overflow-x: hidden;
             }
 
+
             .toolbar-actions {
                 gap: 0.25rem;
             }
+
+
+            /*
+             * This fixed width is intentionally incompatible
+             * with a narrow viewport.
+             */
 
             .table-heading {
                 display: flex;
@@ -851,26 +1088,32 @@ interface ExportColumn {
                 gap: 3rem;
             }
 
+
             .table-title {
                 min-width: 260px;
             }
 
+
             .table-search {
                 width: 260px;
             }
+
 
             .form-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 0.2rem;
             }
 
+
             .category-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
+
             .dialog-content {
                 padding: 2rem 0;
             }
+
 
             .dialog-footer {
                 flex-direction: row;
@@ -908,8 +1151,15 @@ export class Crud implements OnInit {
 
     cols!: Column[];
 
+
+    /*
+     * Intentional asset defect:
+     * "placeholdr" is misspelled.
+     */
+
     private readonly fallbackImage =
         'https://primefaces.org/cdn/primeng/images/demo/product/product-placeholdr.svg';
+
 
     constructor(
         private productService: ProductService,
@@ -917,19 +1167,23 @@ export class Crud implements OnInit {
         private confirmationService: ConfirmationService
     ) {}
 
+
     ngOnInit() {
         this.loadDemoData();
     }
 
+
     exportCSV() {
         this.dt?.exportCSV();
     }
+
 
     loadDemoData() {
 
         this.productService.getProducts().then((data) => {
             this.products.set(data ?? []);
         });
+
 
         this.statuses = [
             {
@@ -945,6 +1199,7 @@ export class Crud implements OnInit {
                 value: 'outofstock'
             }
         ];
+
 
         this.cols = [
             {
@@ -970,13 +1225,19 @@ export class Crud implements OnInit {
             }
         ];
 
+
         this.exportColumns = this.cols.map((col) => ({
             title: col.header,
             dataKey: col.field
         }));
+
     }
 
-    onGlobalFilter(table: Table, event: Event) {
+
+    onGlobalFilter(
+        table: Table,
+        event: Event
+    ) {
 
         const value =
             (event.target as HTMLInputElement).value ?? '';
@@ -984,7 +1245,9 @@ export class Crud implements OnInit {
         this.globalFilterValue = value;
 
         table.filterGlobal(value, 'contains');
+
     }
+
 
     openNew() {
 
@@ -999,37 +1262,57 @@ export class Crud implements OnInit {
         };
 
         this.submitted = false;
+
         this.productDialog = true;
+
     }
+
+
+    /*
+     * Intentional state defect:
+     * The original object reference is used directly.
+     * Editing a field can therefore mutate the displayed
+     * product before Save is pressed.
+     */
 
     editProduct(product: Product) {
 
         this.product = product;
 
         this.submitted = false;
+
         this.productDialog = true;
+
     }
+
 
     hideDialog() {
 
         this.productDialog = false;
+
     }
+
 
     onDialogHide() {
 
         this.submitted = false;
 
         if (this.product) {
+
             this.product.description =
                 this.product.description || '';
+
         }
+
     }
+
 
     deleteSelectedProducts() {
 
         if (!this.selectedProducts?.length) {
             return;
         }
+
 
         this.confirmationService.confirm({
 
@@ -1040,6 +1323,7 @@ export class Crud implements OnInit {
 
             icon: 'pi pi-exclamation-triangle',
 
+
             accept: () => {
 
                 const selectedIds =
@@ -1049,6 +1333,7 @@ export class Crud implements OnInit {
                             .filter(Boolean)
                     );
 
+
                 this.products.update((products) =>
                     products.filter(
                         (product) =>
@@ -1056,7 +1341,9 @@ export class Crud implements OnInit {
                     )
                 );
 
+
                 this.selectedProducts = null;
+
 
                 this.messageService.add({
                     severity: 'success',
@@ -1064,9 +1351,13 @@ export class Crud implements OnInit {
                     detail: 'Products Deleted',
                     life: 3000
                 });
+
             }
+
         });
+
     }
+
 
     deleteProduct(product: Product) {
 
@@ -1081,6 +1372,7 @@ export class Crud implements OnInit {
 
             icon: 'pi pi-exclamation-triangle',
 
+
             accept: () => {
 
                 this.products.update((products) =>
@@ -1090,15 +1382,20 @@ export class Crud implements OnInit {
                     )
                 );
 
+
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Successful',
                     detail: 'Product Deleted',
                     life: 3000
                 });
+
             }
+
         });
+
     }
+
 
     findIndexById(id: string): number {
 
@@ -1106,7 +1403,9 @@ export class Crud implements OnInit {
             (product) =>
                 product.id === id
         );
+
     }
+
 
     createId(): string {
 
@@ -1122,10 +1421,13 @@ export class Crud implements OnInit {
                     Math.random() * chars.length
                 )
             );
+
         }
 
         return id;
+
     }
+
 
     getSeverity(
         status: string
@@ -1144,8 +1446,11 @@ export class Crud implements OnInit {
 
             default:
                 return 'info';
+
         }
+
     }
+
 
     getProductImage(product: Product): string {
 
@@ -1154,7 +1459,9 @@ export class Crud implements OnInit {
         }
 
         return `https://primefaces.org/cdn/primeng/images/demo/product/${product.image}`;
+
     }
+
 
     onImageError(event: Event) {
 
@@ -1164,7 +1471,9 @@ export class Crud implements OnInit {
         if (image.src !== this.fallbackImage) {
             image.src = this.fallbackImage;
         }
+
     }
+
 
     saveProduct() {
 
@@ -1173,14 +1482,17 @@ export class Crud implements OnInit {
         const name =
             this.product.name?.trim();
 
+
         if (!name) {
             return;
         }
+
 
         const productToSave = {
             ...this.product,
             name
         } as Product;
+
 
         if (productToSave.id) {
 
@@ -1192,6 +1504,7 @@ export class Crud implements OnInit {
                 )
             );
 
+
             this.messageService.add({
                 severity: 'success',
                 summary: 'Successful',
@@ -1202,17 +1515,23 @@ export class Crud implements OnInit {
         } else {
 
             const newProduct: Product = {
+
                 ...productToSave,
+
                 id: this.createId(),
+
                 image:
                     productToSave.image ||
                     'product-placeholder.svg'
+
             };
+
 
             this.products.update((products) => [
                 ...products,
                 newProduct
             ]);
+
 
             this.messageService.add({
                 severity: 'success',
@@ -1220,11 +1539,14 @@ export class Crud implements OnInit {
                 detail: 'Product Created',
                 life: 3000
             });
+
         }
+
 
         this.productDialog = false;
 
         this.product = {} as Product;
+
     }
 
 }
