@@ -82,11 +82,11 @@ interface ExportColumn {
             [rowsPerPageOptions]="[10, 20, 30]"
         >
             <ng-template #caption>
-                <div class="flex items-center justify-between">
+                <div class="">
                     <h5 class="m-0">Manage Products</h5>
                     <p-iconfield>
                         <p-inputicon styleClass="pi pi-search" />
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+                        <input pInputText type="text" placeholder="Search..." />
                     </p-iconfield>
                 </div>
             </ng-template>
@@ -128,9 +128,9 @@ interface ExportColumn {
                     <td style="min-width: 12rem">{{ product.code }}</td>
                     <td style="min-width: 16rem">{{ product.name }}</td>
                     <td>
-                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name"  />
                     </td>
-                    <td>{{ product.price | currency: 'USD' }}</td>
+                    <td>{{ product.price }}</td>
                     <td>{{ product.category }}</td>
                     <td>
                         <p-rating [(ngModel)]="product.rating" [readonly]="true" />
@@ -140,7 +140,7 @@ interface ExportColumn {
                     </td>
                     <td>
                         <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" />
-                        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)" />
+                        
                     </td>
                 </tr>
             </ng-template>
@@ -201,8 +201,7 @@ interface ExportColumn {
             </ng-template>
 
             <ng-template #footer>
-                <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-                <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+                
             </ng-template>
         </p-dialog>
 
